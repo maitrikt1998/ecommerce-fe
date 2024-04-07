@@ -1,13 +1,39 @@
 import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../slices/authSlice";
+import { useAppDispatch,useAppSelector } from "../hooks/redux-hooks";
+import { toast } from 'react-toastify';
 
 const Register = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const handleRegister = async () => { };
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const handleRegister = async () => { 
+        if (name && email && password) {
+            try {
+                const response = await dispatch(register({ name, email, password })).unwrap();
+                if (response.status === 1) {
+                    setName("");
+                    setEmail("");
+                    setPassword("");
+                    toast.success("Registration Success!");
+                    navigate('/login');
+                } else {
+                    toast.error('Registration failed!');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                toast.error('Registration failed!');
+            }
+        } else {
+            toast.error('Please fill in all fields');
+        }
+    };
     return (
         <>
             <Container maxWidth="xs">

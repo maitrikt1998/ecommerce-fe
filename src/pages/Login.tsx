@@ -2,11 +2,21 @@ import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Container, CssBaseline, TextField, Typography, Button, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { login } from "../slices/authSlice";
 
 const Login = () => {
+    const dispatch = useAppDispatch();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const handleLogin = () => {};
+    const handleLogin = async() => {
+        if(email && password){
+            const response = await dispatch( login({email,password}));
+        }else{
+            console.log("Please Enter EMail AND Password");
+        }
+    };
     return (
         <>
         <Container maxWidth="xs">
